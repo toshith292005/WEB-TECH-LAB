@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blank 6x6 Sudoku Solver</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #222;
+            color: white;
+            margin-top: 50px;
+        }
+        #sudoku-board {
+            display: grid;
+            grid-template-columns: repeat(6, 50px);
+            grid-template-rows: repeat(6, 50px);
+            background-color: white;
+            border: 3px solid #000;
+            margin-bottom: 20px;
+        }
+        input {
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            font-size: 24px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+            outline: none;
+            color: #333;
+        }
+        /* Thicker borders to create the 2x3 sub-grids */
+        .border-right { border-right: 3px solid #000; }
+        .border-bottom { border-bottom: 3px solid #000; }
+        
+        .solved {
+            color: #d9534f; /* Red color for numbers filled in by the solver */
+        }
+        .user-input {
+            font-weight: bold;
+            color: #333;
+        }
+        .buttons {
+            display: flex;
+            gap: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+        button.clear-btn { background-color: #f44336; }
+        button:hover { opacity: 0.9; }
+    </style>
+</head>
+<body>
+
+    <h2>6x6 Sudoku Solver</h2>
+    <div id="sudoku-board"></div>
+    
+    <div class="buttons">
+        <button onclick="solveSudoku()">Solve Puzzle</button>
+        <button class="clear-btn" onclick="clearBoard()">Clear Grid</button>
+    </div>
+
+    <script>
+        const SIZE = 6;
+        const BOX_ROWS = 2;
+        const BOX_COLS = 3;
+
+        // 1. Initialize the Blank DOM Grid
+        const boardDiv = document.getElementById('sudoku-board');
+        
+        for (let r = 0; r < SIZE; r++) {
+            for (let c = 0; c < SIZE; c++) {
+                let input = document.createElement('input');
+                input.type = 'number';
+                input.min = 1;
+                input.max = 6;
+                input.id = `cell-${r}-${c}`;
+                
+                // Add a listener to style numbers typed by the user
+                input.addEventListener('input', function() {
+                    this.classList.add('user-input');
+                    this.classList.remove('solved');
+                });
+
+                // Add thick borders for the 2x3 boxes
+                if (c === 2) input.classList.add('border-right');
+                if (r === 1 || r === 3) input.classList.add('border-bottom');
+
+                boardDiv.appendChild(input);
+            }
+        }
+
+        // 2. Read the grid from the DOM
+        function readGrid() {
+            let grid = [];
+            for (let r = 0; r < SIZE; r++) {
+                let row = [];
+                for (let c = 0; c < SIZE; c++) {
+                    let val = document.getElementById(`cell-${r}-${c}`).value;
+                    row.push(val === "" ? 0 : parseInt(val));
+                }
+                grid.push(row);
+            }
+            return grid;
+        }
+
+        // 3. Main Solve Function (Triggered by button)
+        function solveSudoku() {
+            let grid = readGrid();
+            
+            // Basic check to ensure the starting board isn't invalid right away
+            if (!isValidStartingBoard(grid)) {
+                alert("Invalid starting board! Check for duplicates in rows, columns, or boxes.");
+                return;
+            }
+
+            if (backtrack(grid)) {
+                updateDOM(grid);
+            } else {
+                alert("No solution exists for this configuration!");
+            }
+        }
+
+        // 4. Backtracking Algorithm
+        function backtrack(grid) {
+            for (let r = 0; r < SIZE; r++) {
+                for (let c = 0; c < SIZE; c++) {
+                    if (grid[r][c] === 0) {
+                        for (let num = 1; num <= 6; num++) {
+                            if (isValid(grid, r, c, num)) {
+                                grid[r][c] = num; 
+                                if (backtrack(grid)) return true; 
+                                grid[r][c] = 0; 
+                            }
+                        }
+                        return false; 
+                    }
+                }
+            }
+            return true; 
+        }
+
+        // 5. Validation Logic for the Solver
+        function isValid(grid, row, col, num) {
+            for (let x = 0; x < SIZE; x++) {
+                if (grid[row][x] === num || grid[x][col] === num) return false;
+            }
+
+            let startRow = row - (row % BOX_ROWS);
+            let startCol = col - (col % BOX_COLS);
+            for (let i = 0; i < BOX_ROWS; i++) {
+                for (let j = 0; j < BOX_COLS; j++) {
+                    if (grid[i + startRow][j + startCol] === num) return false;
+                }
+            }
+            return true;
+        }
+
+        // 6. Check if user's initial input is valid before solving
+        function isValidStartingBoard(grid) {
+            for (let r = 0; r < SIZE; r++) {
+                for (let c = 0; c < SIZE; c++) {
+                    if (grid[r][c] !== 0) {
+                        let temp = grid[r][c];
+                        grid[r][c] = 0; // Temporarily remove to check against other cells
+                        let valid = isValid(grid, r, c, temp);
+                        grid[r][c] = temp; // Put it back
+                        if (!valid) return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        // 7. Update the DOM with the solved array
+        function updateDOM(grid) {
+            for (let r = 0; r < SIZE; r++) {
+                for (let c = 0; c < SIZE; c++) {
+                    let input = document.getElementById(`cell-${r}-${c}`);
+                    if (input.value === "") {
+                        input.value = grid[r][c];
+                        input.classList.add('solved');
+                    }
+                }
+            }
+        }
+
+        // 8. Clear the board completely
+        function clearBoard() {
+            for (let r = 0; r < SIZE; r++) {
+                for (let c = 0; c < SIZE; c++) {
+                    let input = document.getElementById(`cell-${r}-${c}`);
+                    input.value = "";
+                    input.classList.remove('solved', 'user-input');
+                }
+            }
+        }
+    </script>
+</body>
+</html>
