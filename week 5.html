@@ -1,0 +1,265 @@
+```html
+<!DOCTYPE html>
+<html>
+<head>
+<title>Taxmann Income Tax Calculator</title>
+
+<style>
+
+body{
+font-family: Arial;
+background:#e6e6e6;
+}
+
+.container{
+width:750px;
+margin:40px auto;
+background:white;
+border-radius:10px;
+box-shadow:0 0 8px gray;
+overflow:hidden;
+}
+
+.header{
+background:linear-gradient(#d60000,#9c0000);
+color:white;
+text-align:center;
+padding:15px;
+font-size:24px;
+font-weight:bold;
+letter-spacing:2px;
+}
+
+.tabs{
+display:flex;
+background:#333;
+color:white;
+}
+
+.tab{
+flex:1;
+padding:10px;
+text-align:center;
+border-right:1px solid #555;
+}
+
+.form-section{
+padding:15px;
+background:#111;
+color:white;
+}
+
+.row{
+display:flex;
+margin:6px 0;
+}
+
+.row label{
+flex:1;
+padding:8px;
+}
+
+.row select,
+.row input{
+flex:1;
+padding:6px;
+border-radius:4px;
+border:none;
+}
+
+.result-header{
+background:#d60000;
+color:white;
+text-align:center;
+padding:10px;
+font-weight:bold;
+}
+
+.result{
+background:#f0f0f0;
+padding:10px;
+}
+
+.result-row{
+display:flex;
+padding:8px;
+border-bottom:1px solid #ccc;
+}
+
+.result-row span{
+flex:1;
+}
+
+.result-row input{
+flex:1;
+padding:5px;
+}
+
+.buttons{
+padding:10px;
+}
+
+button{
+background:#d60000;
+color:white;
+border:none;
+padding:8px 15px;
+cursor:pointer;
+border-radius:4px;
+}
+
+.footer{
+text-align:center;
+font-size:12px;
+padding:10px;
+color:#444;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">
+TAXMANN'S
+</div>
+
+<div class="tabs">
+<div class="tab">TAX CALCULATOR</div>
+<div class="tab">INCOME & TAX CALCULATOR</div>
+</div>
+
+<div class="form-section">
+
+<div class="row">
+<label>Step 1 : Assessment Year</label>
+<select>
+<option>2020-21</option>
+<option>2021-22</option>
+</select>
+</div>
+
+<div class="row">
+<label>Step 2 : Tax Payer</label>
+<select>
+<option>Individual</option>
+<option>Company</option>
+</select>
+</div>
+
+<div class="row">
+<label>Step 3 : Male / Female / Senior Citizen</label>
+<select>
+<option>Male</option>
+<option>Female</option>
+<option>Senior Citizen</option>
+</select>
+</div>
+
+<div class="row">
+<label>Step 4 : Residential Status</label>
+<select>
+<option>Resident</option>
+<option>Non Resident</option>
+</select>
+</div>
+
+<div class="row">
+<label>Step 5 : Net Taxable Income</label>
+<input type="number" id="income">
+</div>
+
+</div>
+
+<div class="result-header">
+YOUR TAX COMPUTATION
+</div>
+
+<div class="result">
+
+<div class="result-row">
+<span>Income Tax</span>
+<input type="text" id="tax">
+</div>
+
+<div class="result-row">
+<span>Surcharge</span>
+<input type="text" id="surcharge">
+</div>
+
+<div class="result-row">
+<span>Health and Education Cess @ 4%</span>
+<input type="text" id="cess">
+</div>
+
+<div class="result-row">
+<span><b>Total Tax Liability</b></span>
+<input type="text" id="total">
+</div>
+
+</div>
+
+<div class="buttons">
+<button onclick="calculate()">Calculate</button>
+<button onclick="resetForm()">Reset</button>
+</div>
+
+<div class="footer">
+As per Finance (No.2) Bill, 2019
+</div>
+
+</div>
+
+<script>
+
+function calculate(){
+
+let income=parseFloat(document.getElementById("income").value);
+
+let tax=0;
+
+if(income<=250000)
+tax=0;
+
+else if(income<=500000)
+tax=(income-250000)*0.05;
+
+else if(income<=1000000)
+tax=12500+(income-500000)*0.20;
+
+else
+tax=112500+(income-1000000)*0.30;
+
+let surcharge=0;
+
+if(income>5000000)
+surcharge=tax*0.10;
+
+let cess=(tax+surcharge)*0.04;
+
+let total=tax+surcharge+cess;
+
+document.getElementById("tax").value=tax.toFixed(2);
+document.getElementById("surcharge").value=surcharge.toFixed(2);
+document.getElementById("cess").value=cess.toFixed(2);
+document.getElementById("total").value=total.toFixed(2);
+
+}
+
+function resetForm(){
+
+document.getElementById("income").value="";
+document.getElementById("tax").value="";
+document.getElementById("surcharge").value="";
+document.getElementById("cess").value="";
+document.getElementById("total").value="";
+
+}
+
+</script>
+
+</body>
+</html>
+```
