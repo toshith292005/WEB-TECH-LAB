@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Drag and Drop</title>
+<style>
+  #drag {
+    width: 100px;
+    height: 100px;
+    background: orange;
+    cursor: grab;
+  }
+
+  #drop {
+    width: 200px;
+    height: 200px;
+    border: 3px dashed #333;
+    margin-top: 30px;
+  }
+</style>
+</head>
+<body>
+
+<div id="drag" draggable="true">Drag me</div>
+<div id="drop">Drop here</div>
+
+<script>
+  const drag = document.getElementById("drag");
+  const drop = document.getElementById("drop");
+
+  drag.addEventListener("dragstart", e => {
+    e.dataTransfer.setData("text", e.target.id);
+  });
+
+  drop.addEventListener("dragover", e => {
+    e.preventDefault();
+  });
+
+  drop.addEventListener("drop", e => {
+    e.preventDefault();
+    drop.appendChild(drag);
+  });
+</script>
+
+</body>
+</html>
