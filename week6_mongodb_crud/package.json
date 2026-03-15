@@ -1,0 +1,9 @@
+{
+"name": "mongodb-crud",
+"version": "1.0.0",
+"description": "MongoDB CRUD operations",
+"main": "app.js",
+"dependencies": {
+"mongodb": "^6.0.0"
+}
+}
