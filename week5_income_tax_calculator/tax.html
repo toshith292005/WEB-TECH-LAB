@@ -1,1 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Taxmann Income Tax Calculator</title>
+<link rel="stylesheet" href="style.css">
+</head>
 
+<body>
+
+<div class="container">
+
+<div class="header">
+TAXMANN'S
+</div>
+
+<div class="tabs">
+<div class="tab">TAX CALCULATOR</div>
+<div class="tab">INCOME & TAX CALCULATOR</div>
+</div>
+
+<div class="form-section">
+
+<div class="row">
+<label>Step 1 : Assessment Year</label>
+<select>
+<option>2020-21</option>
+<option>2021-22</option>
+</select>
+</div>
+
+<div class="row">
+<label>Step 2 : Tax Payer</label>
+<select>
+<option>Individual</option>
+<option>Company</option>
+</select>
+</div>
+
+<div class="row">
+<label>Step 3 : Male / Female / Senior Citizen</label>
+<select>
+<option>Male</option>
+<option>Female</option>
+<option>Senior Citizen</option>
+</select>
+</div>
+
+<div class="row">
+<label>Step 4 : Residential Status</label>
+<select>
+<option>Resident</option>
+<option>Non Resident</option>
+</select>
+</div>
+
+<div class="row">
+<label>Step 5 : Net Taxable Income</label>
+<input type="number" id="income">
+</div>
+
+</div>
+
+<div class="result-header">
+YOUR TAX COMPUTATION
+</div>
+
+<div class="result">
+
+<div class="result-row">
+<span>Income Tax</span>
+<input type="text" id="tax">
+</div>
+
+<div class="result-row">
+<span>Surcharge</span>
+<input type="text" id="surcharge">
+</div>
+
+<div class="result-row">
+<span>Health and Education Cess @ 4%</span>
+<input type="text" id="cess">
+</div>
+
+<div class="result-row">
+<span><b>Total Tax Liability</b></span>
+<input type="text" id="total">
+</div>
+
+</div>
+
+<div class="buttons">
+<button onclick="calculate()">Calculate</button>
+<button onclick="resetForm()">Reset</button>
+</div>
+
+<div class="footer">
+As per Finance (No.2) Bill, 2019
+</div>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
