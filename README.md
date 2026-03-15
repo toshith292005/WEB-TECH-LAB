@@ -30,6 +30,3 @@ Java program to connect MongoDB and perform operations.
 
 ### Week 8
 MongoDB aggregation queries using the Zipcode dataset.
-
-### Week 9
-Weather application using ES6 and APIs (to be added).
